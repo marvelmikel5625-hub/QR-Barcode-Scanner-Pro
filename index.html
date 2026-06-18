@@ -4,11 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>QR & Barcode Scanner Pro</title>
-    <!-- ZXing library for QR + barcode decoding -->
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.1/umd/index.min.js">
     </script>
     <style>
-        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -20,47 +18,35 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 0.5rem;
         }
-        /* ===== CARD ===== */
         .scanner-card {
             max-width: 780px;
             width: 100%;
             background: #141c26;
             border-radius: 2.5rem;
-            padding: 1.5rem 1.5rem 2rem;
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.04);
-            transition: all 0.2s ease;
+            padding: 1.5rem;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.2rem;
-            padding: 0 0.2rem;
         }
         .header h1 {
             font-weight: 500;
             font-size: 1.5rem;
-            letter-spacing: -0.3px;
             color: #eaf1fc;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
         .header h1 span {
             background: #263544;
             font-size: 0.65rem;
-            font-weight: 500;
             padding: 0.15rem 0.8rem;
             border-radius: 40px;
             color: #9bb9df;
-            letter-spacing: 0.2px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 0.5rem;
         }
         .btn-icon {
             background: #1e2a3a;
@@ -71,32 +57,17 @@
             border-radius: 40px;
             font-size: 1.2rem;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
             border: 1px solid #31425a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-icon:hover {
-            background: #2a3a50;
-            transform: scale(1.04);
-        }
-        .btn-icon:active {
-            transform: scale(0.94);
         }
         .btn-icon.flash-on {
             background: #f5c542;
             color: #1a1f2a;
-            border-color: #f5c542;
         }
-
-        /* ===== VIDEO WRAPPER ===== */
         .video-wrapper {
             position: relative;
             background: #060a10;
             border-radius: 2rem;
             overflow: hidden;
-            box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.7);
             border: 1px solid #263344;
         }
         #video {
@@ -107,7 +78,6 @@
             object-fit: cover;
             background: #060a10;
         }
-        /* overlay frame */
         .scan-overlay {
             position: absolute;
             inset: 0;
@@ -121,34 +91,30 @@
             height: 72%;
             border: 2px solid rgba(80, 190, 255, 0.45);
             border-radius: 28px;
-            box-shadow: 0 0 40px rgba(0, 150, 255, 0.12);
             position: relative;
         }
-        .scan-frame::before,
-        .scan-frame::after {
+        .scan-frame::before {
             content: '';
             position: absolute;
-            width: 24px;
-            height: 24px;
-            border-color: #78c2ff;
-            border-style: solid;
-            border-width: 0;
-        }
-        .scan-frame::before {
             top: -2px;
             left: -2px;
-            border-top-width: 4px;
-            border-left-width: 4px;
+            width: 24px;
+            height: 24px;
+            border-top: 4px solid #78c2ff;
+            border-left: 4px solid #78c2ff;
             border-radius: 8px 0 0 0;
         }
         .scan-frame::after {
+            content: '';
+            position: absolute;
             bottom: -2px;
             right: -2px;
-            border-bottom-width: 4px;
-            border-right-width: 4px;
+            width: 24px;
+            height: 24px;
+            border-bottom: 4px solid #78c2ff;
+            border-right: 4px solid #78c2ff;
             border-radius: 0 0 8px 0;
         }
-        /* animated scan line */
         .scan-line {
             position: absolute;
             left: 10%;
@@ -160,21 +126,10 @@
             border-radius: 4px;
         }
         @keyframes scanMove {
-            0% {
-                top: 12%;
-                opacity: 0.3;
-            }
-            50% {
-                top: 78%;
-                opacity: 1;
-            }
-            100% {
-                top: 12%;
-                opacity: 0.3;
-            }
+            0% { top: 12%; opacity: 0.3; }
+            50% { top: 78%; opacity: 1; }
+            100% { top: 12%; opacity: 0.3; }
         }
-
-        /* ===== STATUS BAR ===== */
         .status-bar {
             margin-top: 1.2rem;
             display: flex;
@@ -192,14 +147,13 @@
             gap: 0.5rem;
             font-size: 0.85rem;
             color: #b8cee7;
-            white-space: nowrap;
         }
         .status-dot {
             width: 11px;
             height: 11px;
             border-radius: 11px;
             background: #3f536a;
-            transition: background 0.25s, box-shadow 0.25s;
+            transition: background 0.25s;
         }
         .status-dot.active {
             background: #2ecc71;
@@ -221,15 +175,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-family: 'Menlo', 'Fira Code', monospace;
-            transition: border 0.2s, box-shadow 0.2s;
+            font-family: monospace;
         }
         #result-output.highlight {
             border-color: #2ecc71;
             box-shadow: 0 0 20px #2ecc7140;
         }
-
-        /* ===== ACTION BUTTONS ===== */
         .action-group {
             display: flex;
             gap: 0.6rem;
@@ -245,12 +196,8 @@
             border-radius: 40px;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s, box-shadow 0.15s;
             border: 1px solid #354a63;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            letter-spacing: 0.2px;
+            transition: background 0.2s;
         }
         .btn-primary {
             background: #1f6eff;
@@ -260,10 +207,6 @@
         }
         .btn-primary:hover {
             background: #3a7eff;
-            transform: scale(1.02);
-        }
-        .btn-primary:active {
-            transform: scale(0.97);
         }
         .btn-secondary {
             background: #182332;
@@ -271,14 +214,6 @@
         }
         .btn-secondary:hover {
             background: #23344a;
-        }
-        .btn-danger {
-            background: #b13e3e;
-            border-color: #d45a5a;
-            color: #fff;
-        }
-        .btn-danger:hover {
-            background: #c94a4a;
         }
         .btn-success {
             background: #1f8b4c;
@@ -288,34 +223,21 @@
         .btn-success:hover {
             background: #279e57;
         }
-        .btn:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            filter: grayscale(0.6);
-        }
-
-        /* ===== BOTTOM SHEET (results popup) ===== */
         .bottom-sheet {
             margin-top: 1.2rem;
             background: #0f1824;
             border-radius: 1.8rem;
-            padding: 0.9rem 1.2rem 1.2rem;
+            padding: 0.9rem 1.2rem;
             border: 1px solid #26384e;
             display: none;
-            animation: slideUp 0.3s ease;
         }
         .bottom-sheet.open {
             display: block;
+            animation: slideUp 0.3s ease;
         }
         @keyframes slideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(18px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
         .sheet-header {
             display: flex;
@@ -327,7 +249,6 @@
             color: #b8cee7;
             font-weight: 450;
             font-size: 0.9rem;
-            letter-spacing: 0.2px;
         }
         .sheet-header .close-sheet {
             background: none;
@@ -335,7 +256,6 @@
             color: #7f97b5;
             font-size: 1.4rem;
             cursor: pointer;
-            padding: 0 0.4rem;
         }
         .sheet-content {
             color: #e2edff;
@@ -345,7 +265,7 @@
             padding: 0.6rem 1rem;
             border-radius: 1.2rem;
             border: 1px solid #203040;
-            font-family: 'Menlo', monospace;
+            font-family: monospace;
             max-height: 120px;
             overflow-y: auto;
         }
@@ -361,73 +281,32 @@
             padding: 0.5rem 1rem;
             font-size: 0.8rem;
         }
-
-        /* ===== FOOTER ===== */
         .footer {
             margin-top: 1.4rem;
             text-align: center;
             font-size: 0.7rem;
             color: #5c738e;
-            letter-spacing: 0.2px;
         }
         .footer span {
             background: #121d2b;
             padding: 0.2rem 1rem;
             border-radius: 30px;
         }
-
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 550px) {
-            .scanner-card {
-                padding: 0.8rem;
-                border-radius: 1.8rem;
-            }
-            .header h1 {
-                font-size: 1.2rem;
-            }
-            .status-bar {
-                flex-direction: column;
-                align-items: stretch;
-                border-radius: 28px;
-            }
-            #result-output {
-                white-space: normal;
-            }
-            .action-group {
-                justify-content: center;
-            }
-            .scan-frame {
-                width: 78%;
-                height: 78%;
-            }
-            .btn-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 1rem;
-            }
-        }
-        @media (max-width: 400px) {
-            .header h1 span {
-                display: none;
-            }
+            .scanner-card { padding: 0.8rem; }
+            .header h1 { font-size: 1.2rem; }
+            .status-bar { flex-direction: column; align-items: stretch; }
+            #result-output { white-space: normal; }
+            .action-group { justify-content: center; }
         }
     </style>
 </head>
 <body>
-
     <div class="scanner-card">
-        <!-- HEADER -->
         <div class="header">
-            <h1>
-                📷 Scan
-                <span>Pro</span>
-            </h1>
-            <div class="header-actions">
-                <button class="btn-icon" id="flashBtn" title="Toggle Flash">🔦</button>
-            </div>
+            <h1>📷 Scan <span>Pro</span></h1>
+            <button class="btn-icon" id="flashBtn">🔦</button>
         </div>
-
-        <!-- VIDEO -->
         <div class="video-wrapper">
             <video id="video" playsinline autoplay muted></video>
             <div class="scan-overlay">
@@ -436,8 +315,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- STATUS -->
         <div class="status-bar">
             <div class="status-badge">
                 <span class="status-dot" id="statusDot"></span>
@@ -445,15 +322,11 @@
             </div>
             <div id="result-output">—</div>
         </div>
-
-        <!-- ACTIONS -->
         <div class="action-group">
             <button class="btn btn-primary" id="startBtn">▶ Start</button>
             <button class="btn btn-secondary" id="pauseBtn">⏸ Pause</button>
             <button class="btn btn-secondary" id="clearBtn">✕ Clear</button>
         </div>
-
-        <!-- BOTTOM SHEET (result popup) -->
         <div class="bottom-sheet" id="bottomSheet">
             <div class="sheet-header">
                 <h3>📋 Scanned Data</h3>
@@ -465,351 +338,270 @@
                 <button class="btn btn-primary" id="openLinkBtn">🔗 Open Link</button>
             </div>
         </div>
-
-        <div class="footer">
-            <span>🔍 real‑time · QR &amp; barcode</span>
-        </div>
+        <div class="footer"><span>🔍 real‑time · QR &amp; barcode</span></div>
     </div>
 
     <script>
-        (function() {
-            "use strict";
+        const video = document.getElementById('video');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const resultOutput = document.getElementById('result-output');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const flashBtn = document.getElementById('flashBtn');
+        const bottomSheet = document.getElementById('bottomSheet');
+        const sheetContent = document.getElementById('sheetContent');
+        const closeSheetBtn = document.getElementById('closeSheetBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const openLinkBtn = document.getElementById('openLinkBtn');
 
-            // ===== DOM refs =====
-            const video = document.getElementById('video');
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-            const resultOutput = document.getElementById('result-output');
-            const startBtn = document.getElementById('startBtn');
-            const pauseBtn = document.getElementById('pauseBtn');
-            const clearBtn = document.getElementById('clearBtn');
-            const flashBtn = document.getElementById('flashBtn');
-            const bottomSheet = document.getElementById('bottomSheet');
-            const sheetContent = document.getElementById('sheetContent');
-            const closeSheetBtn = document.getElementById('closeSheetBtn');
-            const copyBtn = document.getElementById('copyBtn');
-            const openLinkBtn = document.getElementById('openLinkBtn');
+        let codeReader = null;
+        let stream = null;
+        let isScanning = false;
+        let isPaused = false;
+        let lastDecodedText = '';
+        let actionInProgress = false;
+        let flashEnabled = false;
+        let currentDecodedText = '';
 
-            // ===== STATE =====
-            let codeReader = null;
-            let stream = null;
-            let isScanning = false;
-            let isPaused = false;
-            let lastDecodedText = '';
-            let actionInProgress = false;
-            let highlightTimeout = null;
-            let flashEnabled = false;
-            let currentDecodedText = '';
-
-            // ===== HELPERS =====
-            function setStatus(state, msg) {
+        function setStatus(state, msg) {
+            statusDot.className = 'status-dot';
+            if (state === 'active') {
+                statusDot.classList.add('active');
+                statusText.textContent = msg || 'Scanning...';
+            } else if (state === 'error') {
+                statusDot.classList.add('error');
+                statusText.textContent = msg || 'Error';
+            } else {
+                statusText.textContent = msg || 'Ready';
                 statusDot.className = 'status-dot';
-                if (state === 'active') {
-                    statusDot.classList.add('active');
-                    statusText.textContent = msg || 'Scanning...';
-                } else if (state === 'error') {
-                    statusDot.classList.add('error');
-                    statusText.textContent = msg || 'Error';
-                } else {
-                    statusText.textContent = msg || 'Ready';
-                    statusDot.className = 'status-dot';
-                }
             }
+        }
 
-            function clearResultHighlight() {
-                resultOutput.classList.remove('highlight');
-                if (highlightTimeout) {
-                    clearTimeout(highlightTimeout);
-                    highlightTimeout = null;
-                }
-            }
-
-            function setResult(text) {
-                if (!text) {
-                    resultOutput.textContent = '—';
-                    clearResultHighlight();
-                    bottomSheet.classList.remove('open');
-                    currentDecodedText = '';
-                    return;
-                }
-                currentDecodedText = text;
-                resultOutput.textContent = text;
-                resultOutput.classList.add('highlight');
-                // show bottom sheet
-                sheetContent.textContent = text;
-                bottomSheet.classList.add('open');
-                // auto hide highlight after 6s
-                if (highlightTimeout) clearTimeout(highlightTimeout);
-                highlightTimeout = setTimeout(() => {
-                    clearResultHighlight();
-                    highlightTimeout = null;
-                }, 6000);
-            }
-
-            // ===== VALIDATE URL =====
-            function isValidUrl(string) {
-                try {
-                    const url = new URL(string);
-                    return url.protocol === 'http:' || url.protocol === 'https:';
-                } catch (_) {
-                    return false;
-                }
-            }
-
-            // ===== PROCESS SCAN =====
-            function processQRData(rawText) {
-                if (!rawText || actionInProgress) return;
-                if (rawText === lastDecodedText) return;
-                lastDecodedText = rawText;
-
-                setResult(rawText);
-                setStatus('active', 'Code detected');
-
-                const trimmed = rawText.trim();
-                let isUrl = false;
-                let url = '';
-
-                // check if it's a URL
-                if (isValidUrl(trimmed)) {
-                    isUrl = true;
-                    url = trimmed;
-                } else if (/^www\.[a-z0-9-]+\.[a-z]{2,}/i.test(trimmed)) {
-                    isUrl = true;
-                    url = 'https://' + trimmed;
-                } else if (/^[a-z0-9-]+\.[a-z]{2,}/i.test(trimmed) && !trimmed.includes(' ')) {
-                    isUrl = true;
-                    url = 'https://' + trimmed;
-                }
-
-                // store for bottom sheet actions
-                currentDecodedText = rawText;
-
-                // if URL → auto-navigate (with safety)
-                if (isUrl && url) {
-                    actionInProgress = true;
-                    setStatus('active', '🌐 Opening link...');
-                    // open in new tab
-                    try {
-                        const win = window.open(url, '_blank');
-                        if (!win || win.closed) {
-                            window.location.href = url;
-                        }
-                    } catch (e) {
-                        setStatus('error', 'Navigation failed');
-                    }
-                    setTimeout(() => { actionInProgress = false; }, 1200);
-                } else {
-                    // show in bottom sheet (already shown)
-                    setStatus('active', 'Text scanned');
-                }
-            }
-
-            // ===== CAMERA =====
-            async function stopCamera() {
-                if (stream) {
-                    stream.getTracks().forEach(t => t.stop());
-                    stream = null;
-                }
-                video.srcObject = null;
-                isScanning = false;
-                isPaused = false;
-                if (codeReader) {
-                    try { await codeReader.reset(); } catch (_) {}
-                }
-                setStatus(null, 'Stopped');
-                flashEnabled = false;
-                flashBtn.classList.remove('flash-on');
-                flashBtn.textContent = '🔦';
-                clearResultHighlight();
-            }
-
-            async function startScanner() {
-                if (isScanning) {
-                    await stopCamera();
-                    await new Promise(r => setTimeout(r, 300));
-                }
-
-                try {
-                    setStatus(null, 'Initializing...');
-                    const constraints = {
-                        video: {
-                            facingMode: { ideal: 'environment' },
-                            width: { ideal: 640 },
-                            height: { ideal: 480 }
-                        },
-                        audio: false
-                    };
-
-                    stream = await navigator.mediaDevices.getUserMedia(constraints);
-                    video.srcObject = stream;
-                    await video.play();
-
-                    if (!codeReader) {
-                        codeReader = new ZXing.BrowserQRCodeReader();
-                    }
-
-                    isScanning = true;
-                    isPaused = false;
-                    lastDecodedText = '';
-                    setStatus('active', 'Scanning...');
-
-                    await codeReader.decodeFromVideoDevice(null, video, (result, error) => {
-                        if (!isScanning || isPaused) return;
-                        if (result && result.getText) {
-                            const text = result.getText();
-                            if (text && text !== lastDecodedText) {
-                                processQRData(text);
-                            } else {
-                                if (isScanning && !isPaused) setStatus('active', 'Scanning...');
-                            }
-                        } else {
-                            if (isScanning && !isPaused) setStatus('active', 'Scanning...');
-                        }
-                    });
-
-                    setStatus('active', 'Scanning...');
-                } catch (err) {
-                    console.error('Camera error:', err);
-                    setStatus('error', 'Camera unavailable');
-                    await stopCamera();
-                    setResult('⚠️ Camera error');
-                }
-            }
-
-            // ===== FLASH =====
-            function toggleFlash() {
-                if (!stream) return;
-                const track = stream.getVideoTracks()[0];
-                if (!track) return;
-                const capabilities = track.getCapabilities();
-                if (!capabilities.torch) {
-                    setStatus('error', 'Flash not supported');
-                    setTimeout(() => { if (isScanning) setStatus('active', 'Scanning...'); }, 1500);
-                    return;
-                }
-                flashEnabled = !flashEnabled;
-                track.applyConstraints({
-                    advanced: [{ torch: flashEnabled }]
-                }).catch(() => {
-                    setStatus('error', 'Flash failed');
-                });
-                flashBtn.classList.toggle('flash-on', flashEnabled);
-                flashBtn.textContent = flashEnabled ? '🔆' : '🔦';
-            }
-
-            // ===== BOTTOM SHEET ACTIONS =====
-            function closeSheet() {
+        function setResult(text) {
+            if (!text) {
+                resultOutput.textContent = '—';
                 bottomSheet.classList.remove('open');
+                currentDecodedText = '';
+                return;
             }
+            currentDecodedText = text;
+            resultOutput.textContent = text;
+            resultOutput.classList.add('highlight');
+            sheetContent.textContent = text;
+            bottomSheet.classList.add('open');
+            setTimeout(() => {
+                resultOutput.classList.remove('highlight');
+            }, 6000);
+        }
 
-            function copyResult() {
-                const text = currentDecodedText;
-                if (!text) return;
-                navigator.clipboard.writeText(text).then(() => {
-                    setStatus('active', 'Copied!');
-                    setTimeout(() => { if (isScanning) setStatus('active', 'Scanning...'); }, 1200);
-                }).catch(() => {
-                    // fallback
-                    const ta = document.createElement('textarea');
-                    ta.value = text;
-                    document.body.appendChild(ta);
-                    ta.select();
-                    document.execCommand('copy');
-                    ta.remove();
-                    setStatus('active', 'Copied!');
-                    setTimeout(() => { if (isScanning) setStatus('active', 'Scanning...'); }, 1200);
-                });
+        function isValidUrl(string) {
+            try {
+                const url = new URL(string);
+                return url.protocol === 'http:' || url.protocol === 'https:';
+            } catch (_) {
+                return false;
             }
+        }
 
-            function openLink() {
-                const text = currentDecodedText;
-                if (!text) return;
-                let url = text.trim();
-                if (!isValidUrl(url)) {
-                    if (/^www\.[a-z0-9-]+\.[a-z]{2,}/i.test(url)) {
-                        url = 'https://' + url;
-                    } else if (/^[a-z0-9-]+\.[a-z]{2,}/i.test(url) && !url.includes(' ')) {
-                        url = 'https://' + url;
-                    } else {
-                        setStatus('error', 'Not a valid link');
-                        setTimeout(() => { if (isScanning) setStatus('active', 'Scanning...'); }, 1500);
-                        return;
-                    }
+        function processQRData(rawText) {
+            if (!rawText || actionInProgress) return;
+            if (rawText === lastDecodedText) return;
+            lastDecodedText = rawText;
+            setResult(rawText);
+            setStatus('active', 'Code detected');
+            const trimmed = rawText.trim();
+            let url = '';
+            if (isValidUrl(trimmed)) {
+                url = trimmed;
+            } else if (/^www\.[a-z0-9-]+\.[a-z]{2,}/i.test(trimmed)) {
+                url = 'https://' + trimmed;
+            } else if (/^[a-z0-9-]+\.[a-z]{2,}/i.test(trimmed) && !trimmed.includes(' ')) {
+                url = 'https://' + trimmed;
+            }
+            if (url) {
+                actionInProgress = true;
+                setStatus('active', '🌐 Opening link...');
+                try {
+                    const win = window.open(url, '_blank');
+                    if (!win || win.closed) window.location.href = url;
+                } catch (e) {
+                    setStatus('error', 'Navigation failed');
                 }
-                if (isValidUrl(url)) {
-                    try {
-                        const win = window.open(url, '_blank');
-                        if (!win || win.closed) {
-                            window.location.href = url;
-                        }
-                        closeSheet();
-                    } catch (e) {
-                        setStatus('error', 'Cannot open link');
-                    }
-                } else {
-                    setStatus('error', 'Invalid URL');
-                }
+                setTimeout(() => { actionInProgress = false; }, 1200);
+            } else {
+                setStatus('active', 'Text scanned');
             }
+        }
 
-            // ===== PAUSE / RESUME =====
-            function togglePause() {
-                if (!isScanning) return;
-                isPaused = !isPaused;
-                pauseBtn.textContent = isPaused ? '▶ Resume' : '⏸ Pause';
-                setStatus(isPaused ? null : 'active', isPaused ? 'Paused' : 'Scanning...');
-                if (!isPaused) {
-                    // reset duplicate guard to allow new scans after resume
-                    lastDecodedText = '';
-                }
+        async function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                stream = null;
             }
+            video.srcObject = null;
+            isScanning = false;
+            isPaused = false;
+            if (codeReader) {
+                try { await codeReader.reset(); } catch (_) {}
+            }
+            setStatus(null, 'Stopped');
+            flashEnabled = false;
+            flashBtn.classList.remove('flash-on');
+            flashBtn.textContent = '🔦';
+        }
 
-            // ===== CLEAR =====
-            function clearResult() {
-                setResult(null);
+        async function startScanner() {
+            if (isScanning) {
+                await stopCamera();
+                await new Promise(r => setTimeout(r, 300));
+            }
+            try {
+                setStatus(null, 'Initializing...');
+                const constraints = {
+                    video: {
+                        facingMode: { ideal: 'environment' },
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    },
+                    audio: false
+                };
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+                await video.play();
+                if (!codeReader) {
+                    codeReader = new ZXing.BrowserQRCodeReader();
+                }
+                isScanning = true;
+                isPaused = false;
                 lastDecodedText = '';
-                actionInProgress = false;
-                closeSheet();
-                if (highlightTimeout) {
-                    clearTimeout(highlightTimeout);
-                    highlightTimeout = null;
-                }
-                clearResultHighlight();
-                if (!isScanning) {
-                    setStatus(null, 'Ready');
-                } else if (!isPaused) {
-                    setStatus('active', 'Scanning...');
+                setStatus('active', 'Scanning...');
+                await codeReader.decodeFromVideoDevice(null, video, (result, error) => {
+                    if (!isScanning || isPaused) return;
+                    if (result && result.getText) {
+                        const text = result.getText();
+                        if (text && text !== lastDecodedText) {
+                            processQRData(text);
+                        }
+                    }
+                });
+                setStatus('active', 'Scanning...');
+            } catch (err) {
+                console.error('Camera error:', err);
+                setStatus('error', 'Camera unavailable');
+                await stopCamera();
+                setResult('⚠️ Camera error');
+            }
+        }
+
+        function toggleFlash() {
+            if (!stream) return;
+            const track = stream.getVideoTracks()[0];
+            if (!track) return;
+            const capabilities = track.getCapabilities();
+            if (!capabilities.torch) {
+                setStatus('error', 'Flash not supported');
+                setTimeout(() => { if (isScanning) setStatus('active', 'Scanning...'); }, 1500);
+                return;
+            }
+            flashEnabled = !flashEnabled;
+            track.applyConstraints({
+                advanced: [{ torch: flashEnabled }]
+            }).catch(() => {
+                setStatus('error', 'Flash failed');
+            });
+            flashBtn.classList.toggle('flash-on', flashEnabled);
+            flashBtn.textContent = flashEnabled ? '🔆' : '🔦';
+        }
+
+        function togglePause() {
+            if (!isScanning) return;
+            isPaused = !isPaused;
+            pauseBtn.textContent = isPaused ? '▶ Resume' : '⏸ Pause';
+            setStatus(isPaused ? null : 'active', isPaused ? 'Paused' : 'Scanning...');
+            if (!isPaused) lastDecodedText = '';
+        }
+
+        function clearResult() {
+            setResult(null);
+            lastDecodedText = '';
+            actionInProgress = false;
+            bottomSheet.classList.remove('open');
+            if (!isScanning) setStatus(null, 'Ready');
+            else if (!isPaused) setStatus('active', 'Scanning...');
+            else setStatus(null, 'Paused');
+        }
+
+        function closeSheet() {
+            bottomSheet.classList.remove('open');
+        }
+
+        function copyResult() {
+            if (!currentDecodedText) return;
+            navigator.clipboard.writeText(currentDecodedText).then(() => {
+                setStatus('active', 'Copied!');
+                setTimeout(() => { if (isScanning) setStatus('active', 'Scanning...'); }, 1200);
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = currentDecodedText;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                setStatus('active', 'Copied!');
+                setTimeout(() => { if (isScanning) setStatus('active', 'Scanning...'); }, 1200);
+            });
+        }
+
+        function openLink() {
+            if (!currentDecodedText) return;
+            let url = currentDecodedText.trim();
+            if (!isValidUrl(url)) {
+                if (/^www\.[a-z0-9-]+\.[a-z]{2,}/i.test(url)) {
+                    url = 'https://' + url;
+                } else if (/^[a-z0-9-]+\.[a-z]{2,}/i.test(url) && !url.includes(' ')) {
+                    url = 'https://' + url;
                 } else {
-                    setStatus(null, 'Paused');
+                    setStatus('error', 'Not a valid link');
+                    return;
                 }
             }
-
-            // ===== EVENT BINDING =====
-            startBtn.addEventListener('click', startScanner);
-            pauseBtn.addEventListener('click', togglePause);
-            clearBtn.addEventListener('click', clearResult);
-            flashBtn.addEventListener('click', toggleFlash);
-            closeSheetBtn.addEventListener('click', closeSheet);
-            copyBtn.addEventListener('click', copyResult);
-            openLinkBtn.addEventListener('click', openLink);
-
-            // ===== CLEANUP =====
-            window.addEventListener('beforeunload', async () => {
-                if (codeReader) {
-                    try { await codeReader.reset(); } catch (_) {}
+            if (isValidUrl(url)) {
+                try {
+                    const win = window.open(url, '_blank');
+                    if (!win || win.closed) window.location.href = url;
+                    closeSheet();
+                } catch (e) {
+                    setStatus('error', 'Cannot open link');
                 }
-                if (stream) {
-                    stream.getTracks().forEach(t => t.stop());
-                    stream = null;
-                }
-                video.srcObject = null;
-            });
+            } else {
+                setStatus('error', 'Invalid URL');
+            }
+        }
 
-            // ===== INIT =====
-            setStatus(null, 'Ready');
-            setResult(null);
-            console.log('📷 QR/Barcode Scanner Pro · Production ready');
-        })();
+        startBtn.addEventListener('click', startScanner);
+        pauseBtn.addEventListener('click', togglePause);
+        clearBtn.addEventListener('click', clearResult);
+        flashBtn.addEventListener('click', toggleFlash);
+        closeSheetBtn.addEventListener('click', closeSheet);
+        copyBtn.addEventListener('click', copyResult);
+        openLinkBtn.addEventListener('click', openLink);
+
+        window.addEventListener('beforeunload', async () => {
+            if (codeReader) {
+                try { await codeReader.reset(); } catch (_) {}
+            }
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                stream = null;
+            }
+            video.srcObject = null;
+        });
+
+        setStatus(null, 'Ready');
+        setResult(null);
+        console.log('📷 QR/Barcode Scanner Pro · Ready');
     </script>
-
 </body>
 </html>
