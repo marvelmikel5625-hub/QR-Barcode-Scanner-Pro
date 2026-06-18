@@ -1,14 +1,6 @@
 {
-  "name": "qr-scanner-marvel-2026",
+  "name": "qr-scanner-2026",
   "version": "1.0.0",
-  "description": "Production QR & Barcode Scanner",
-  "main": "index.html",
-  "scripts": {
-    "build": "./build.sh",
-    "start": "npx serve ."
-  },
-  "devDependencies": {
-    "serve": "^14.0.0",
-    "vercel": "^28.0.0"
-  }
+  "description": "QR & Barcode Scanner",
+  "main": "index.html"
 }
