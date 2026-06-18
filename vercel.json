@@ -1,23 +1,8 @@
 {
   "version": 2,
-  "name": "qr-barcode-scanner-pro",
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/index.html"
-    }
-  ],
+  "name": "qr-barcode-scanner-app",
+  "buildCommand": "./build.sh",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
@@ -33,6 +18,10 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(self)"
         }
       ]
     }
