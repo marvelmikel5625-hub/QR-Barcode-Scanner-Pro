@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "qr-barcode-scanner-app",
+  "name": "qr-scanner-marvel-2026",
   "buildCommand": "./build.sh",
   "outputDirectory": ".",
   "headers": [
