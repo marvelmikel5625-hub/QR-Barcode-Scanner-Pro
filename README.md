@@ -1,34 +1,31 @@
-# 📷 QR & Barcode Scanner Pro
+# QR & Barcode Scanner Pro
 
-A production-ready web application that scans QR codes and barcodes using your device's camera. Built with vanilla JavaScript and ZXing library.
+A production-ready QR code and barcode scanner web app.
 
-## ✨ Features
+## Features
+- 📸 Real-time camera access
+- 🔍 Instant QR/Barcode detection
+- 🌐 Automatic URL navigation
+- 📋 Copy to clipboard
+- 🔦 Flashlight support
+- 📱 Mobile responsive
 
-- 📸 Real-time camera access (mobile & desktop)
-- 🔍 Instant QR code and barcode detection
-- 🌐 Automatic URL detection and navigation
-- 📋 Copy scanned data to clipboard
-- 🔦 Flashlight toggle support
-- ⏸️ Pause/Resume scanning
-- 🎨 Modern UI like WhatsApp/Instagram scanner
-- 📱 Fully responsive design
+## Deploy on Vercel
 
-## 🚀 Live Demo
+1. Fork this repository
+2. Go to [Vercel](https://vercel.com)
+3. Click "Add New" → "Project"
+4. Select this repository
+5. Click "Deploy"
 
-[View Live Demo](https://your-app-name.vercel.app)
+## Live Demo
+[View Demo](https://qr-scanner-2026.vercel.app)
 
-## 🛠️ Tech Stack
+## Usage
+1. Click "Start" to access camera
+2. Point at any QR code or barcode
+3. URLs open automatically
+4. Text data can be copied
 
-- HTML5
-- CSS3 (with animations)
-- Vanilla JavaScript
-- [ZXing Library](https://github.com/zxing-js/library) for QR/Barcode decoding
-
-## 📦 Installation
-
-### Local Development
-
-1. Clone the repository:
-```bash
-git clone https://github.com/your-username/qr-barcode-scanner.git
-cd qr-barcode-scanner
+## License
+MIT
